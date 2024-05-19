@@ -4,7 +4,7 @@ using MinimalAPIPeliculas;
 
 namespace EjercicioWebAPI.Repositorios
 {
-    public class RepositorioInscripcion
+    public class RepositorioInscripcion : IRepositorioInscripcion
     {
         private readonly ApplicationDbContext context;
 
@@ -47,4 +47,4 @@ namespace EjercicioWebAPI.Repositorios
         }
     }
 }
-}
+
