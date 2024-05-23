@@ -4,6 +4,6 @@ namespace MinimalAPIPeliculas.Servicios
 {
     public interface IServicioUsuarios
     {
-        Task<IdentityUser?> ObtenerUsurio();
+        Task<IdentityUser?> ObtenerUsuario();
     }
 }

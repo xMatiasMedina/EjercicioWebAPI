@@ -8,6 +8,7 @@ using MinimalAPIPeliculas.Repositorios;
 using MinimalAPIPeliculas.Servicios;
 using MinimalAPIPeliculas.Utilidades;
 using MinimalAPIPeliculas.Entidades;
+using EjercicioWebAPI.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 var origenesPermitidos = builder.Configuration.GetValue<string>("origenesPermitidos")!;
@@ -116,5 +117,7 @@ app.UseOutputCache();
 
 app.UseAuthorization();
 
+//Mapeo de los distintos grupos de endpoints.
+app.MapGroup("/preparadoresfisicos").MapPreparadoresFisicos();
 //Fin de area de los middleware
 app.Run();
