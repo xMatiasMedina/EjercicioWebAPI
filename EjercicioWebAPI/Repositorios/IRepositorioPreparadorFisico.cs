@@ -1,4 +1,5 @@
 ﻿using EjercicioWebAPI.Entidades;
+using MinimalAPIPeliculas.DTOs;
 
 namespace EjercicioWebAPI.Repositorios
 {
@@ -9,6 +10,6 @@ namespace EjercicioWebAPI.Repositorios
         Task<int> Crear(PreparadorFisico preparador);
         Task<bool> Existe(int id);
         Task<PreparadorFisico?> ObtenerPorId(int id);
-        Task<List<PreparadorFisico>> ObtenerTodos();
+        Task<List<PreparadorFisico>> ObtenerTodos(PaginacionDTO paginacionDTO);
     }
 }

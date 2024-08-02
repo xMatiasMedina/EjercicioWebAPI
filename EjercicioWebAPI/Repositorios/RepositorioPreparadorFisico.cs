@@ -1,16 +1,21 @@
 ﻿using EjercicioWebAPI.Entidades;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MinimalAPIPeliculas;
+using MinimalAPIPeliculas.DTOs;
+using MinimalAPIPeliculas.Utilidades;
 
 namespace EjercicioWebAPI.Repositorios
 {
     public class RepositorioPreparadorFisico : IRepositorioPreparadorFisico
     {
         private readonly ApplicationDbContext context;
+        private readonly HttpContext httpContext;
 
-        public RepositorioPreparadorFisico(ApplicationDbContext context)
+        public RepositorioPreparadorFisico(ApplicationDbContext context, HttpContextAccessor httpContextAccessor)
         {
             this.context = context;
+            httpContext = httpContextAccessor.HttpContext!;
         }
 
         public async Task Actualizar(PreparadorFisico preparador)
@@ -44,12 +49,14 @@ namespace EjercicioWebAPI.Repositorios
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<PreparadorFisico>> ObtenerTodos()
+        public async Task<List<PreparadorFisico>> ObtenerTodos(PaginacionDTO paginacionDTO)
         {
-            return await context.PreparadoresFisicos
+            var queryable = context.PreparadoresFisicos
                 .Include(p => p.Persona)
                 .Include(p => p.Clases)
-                .ToListAsync();
+                .AsQueryable(); //Obtengo el queryable de actores
+            await httpContext.InsertarParametrosPaginacionEnCabecera(queryable);
+            return await queryable.OrderBy(a => a.Id).Paginar(paginacionDTO).ToListAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EjercicioWebAPI.Entidades;
+using MinimalAPIPeliculas.DTOs;
 
 namespace EjercicioWebAPI.Repositorios
 {
@@ -9,6 +10,6 @@ namespace EjercicioWebAPI.Repositorios
         Task<int> Crear(Review review);
         Task<bool> Existe(int id);
         Task<Review?> ObtenerPorId(int id);
-        Task<List<Review>> ObtenerTodos();
+        Task<List<Review>> ObtenerTodos(PaginacionDTO paginacionDTO);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EjercicioWebAPI.Entidades;
+using MinimalAPIPeliculas.DTOs;
 
 namespace EjercicioWebAPI.Repositorios
 {
@@ -9,6 +10,6 @@ namespace EjercicioWebAPI.Repositorios
         Task<int> Crear(Persona persona);
         Task<bool> Existe(int dni);
         Task<Persona?> ObtenerPorDNI(int dni);
-        Task<List<Persona>> ObtenerTodos();
+        Task<List<Persona>> ObtenerTodos(PaginacionDTO paginacionDTO);
     }
 }

@@ -1,16 +1,21 @@
 ﻿using EjercicioWebAPI.Entidades;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MinimalAPIPeliculas;
+using MinimalAPIPeliculas.DTOs;
+using MinimalAPIPeliculas.Utilidades;
 
 namespace EjercicioWebAPI.Repositorios
 {
     public class RepositorioReview : IRepositorioReview
     {
         private readonly ApplicationDbContext context;
+        private readonly HttpContext httpContext;
 
-        public RepositorioReview(ApplicationDbContext context)
+        public RepositorioReview(ApplicationDbContext context, HttpContextAccessor httpContextAccessor)
         {
             this.context = context;
+            this.httpContext = httpContextAccessor.HttpContext!;
         }
 
         public async Task Actualizar(Review review)
@@ -41,9 +46,11 @@ namespace EjercicioWebAPI.Repositorios
             return await context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<Review>> ObtenerTodos()
+        public async Task<List<Review>> ObtenerTodos(PaginacionDTO paginacionDTO)
         {
-            return await context.Reviews.ToListAsync();
+            var queryable = context.Reviews.AsQueryable(); //Obtengo el queryable de actores
+            await httpContext.InsertarParametrosPaginacionEnCabecera(queryable);
+            return await queryable.OrderBy(a => a.Id).Paginar(paginacionDTO).ToListAsync();
         }
     }
 }

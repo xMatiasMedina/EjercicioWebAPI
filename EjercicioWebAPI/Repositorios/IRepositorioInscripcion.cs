@@ -1,4 +1,5 @@
 ﻿using EjercicioWebAPI.Entidades;
+using MinimalAPIPeliculas.DTOs;
 
 namespace EjercicioWebAPI.Repositorios
 {
@@ -9,6 +10,6 @@ namespace EjercicioWebAPI.Repositorios
         Task<int> Crear(Inscripcion inscripcion);
         Task<bool> Existe(int id);
         Task<Inscripcion?> ObtenerPorId(int id);
-        Task<List<Inscripcion>> ObtenerTodos();
+        Task<List<Inscripcion>> ObtenerTodos(PaginacionDTO paginacionDTO);
     }
 }
