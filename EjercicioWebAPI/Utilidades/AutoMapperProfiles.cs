@@ -16,8 +16,6 @@ namespace EjercicioWebAPI.Utilidades
             CreateMap<Inscripcion, InscripcionesDTO>();
             CreateMap<CrearPreparadorFisicoDTO, PreparadorFisico>();
             CreateMap<PreparadorFisico, PreparadorFisicoDTO>();
-            CreateMap<CrearReviewsDTO, Review>();
-            CreateMap<Review, ReviewsDTO>();
             CreateMap<CrearPersonaDTO, Persona>();
             CreateMap<Persona, PersonaDTO>();
         }

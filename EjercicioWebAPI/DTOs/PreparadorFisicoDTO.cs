@@ -10,5 +10,6 @@ namespace EjercicioWebAPI.DTOs
         public float PuntajeClasePromedio { get; set; }
         public Persona Persona { get; set; } = null!;//Propiedad de Navegacion
         public List<Clase> Clases { get; set; } = new List<Clase>();
+
     }
 }

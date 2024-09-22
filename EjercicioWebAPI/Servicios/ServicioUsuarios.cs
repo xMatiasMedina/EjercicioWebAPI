@@ -13,7 +13,6 @@ namespace EjercicioWebAPI.Servicios
             this.userManager = userManager;
         }
 
-        public async Task<IdentityUser?> ObtenerUsurio()
         {
             var emailClaim = httpContextAccessor.HttpContext!
                 .User.Claims.Where(x => x.Type == "email").FirstOrDefault(); //ASPNETCORE hace mapeos automaticos a ciertos tipos y les cambia el nombre

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 namespace EjercicioWebAPI.Entidades
 {
     public class Persona
@@ -7,6 +8,8 @@ namespace EjercicioWebAPI.Entidades
         public string Nombre { get; set; } = null!;
         public string Apellido { get; set; } = null!;
 
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; } = null!;
+        
+        public IdentityUser Usuario { get; set; } = null!;
     }
 }
