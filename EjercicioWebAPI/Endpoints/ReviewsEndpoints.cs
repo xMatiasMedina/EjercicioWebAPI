@@ -5,7 +5,6 @@ using EjercicioWebAPI.Repositorios;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using EjercicioWebAPI.DTOs;
 using EjercicioWebAPI.Filtros;
 using EjercicioWebAPI.Servicios;
 using EjercicioWebAPI.Utilidades;
@@ -15,33 +14,39 @@ namespace EjercicioWebAPI.Endpoints
     public static class ReviewsEndpoints
     {
         private static readonly string contenedor = "reviews";
+
         public static RouteGroupBuilder MapReviews(this RouteGroupBuilder group)
         {
-            group.MapGet("/", ObtenerTodos).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("reviews-get"));
+            group.MapGet("/", ObtenerTodos)
+                .CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("reviews-get"));
             group.MapGet("/{id:int}", ObtenerPorId);
-            group.MapPost("/", Crear).DisableAntiforgery()//.AddEndpointFilter<FiltroValidaciones<CrearReviewsDTO>>()
-                .RequireAuthorization(policyNames: "esadmin")
-                .WithOpenApi();//Desabilita procesos de seguridad (por las imagenes)
-            group.MapPut("/{id:int}", Actualizar).DisableAntiforgery()//.AddEndpointFilter<FiltroValidaciones<CrearReviewsDTO>>()
-                .RequireAuthorization(policyNames: "esadmin").WithOpenApi();
+            group.MapPost("/", Crear)
+                .RequireAuthorization("esadmin")
+                .WithOpenApi();
+            group.MapPut("/{id:int}", Actualizar)
+                .RequireAuthorization("esadmin")
+                .WithOpenApi();
             group.MapDelete("/{id:int}", Borrar)
-                .RequireAuthorization(policyNames: "esadmin");
+                .RequireAuthorization("esadmin");
             return group;
         }
 
-        static async Task<Ok<List<ReviewsDTO>>> ObtenerTodos(IRepositorioReview repositorio, IMapper mapper,
-             PaginacionDTO paginacion)//temporal //En el GET No se puede mappear desde el cuerpo
+        static async Task<Results<Ok<List<ReviewsDTO>>, NotFound>> ObtenerTodos(
+            [FromServices] IRepositorioReview repositorio,
+            [FromServices] IMapper mapper,
+            [FromQuery] PaginacionDTO paginacion) // Use [FromQuery] for pagination
         {
-            //var paginacion = new PaginacionDTO { Pagina = pagina, RecordsPorPagina = recordsPorPagina };
             var reviews = await repositorio.ObtenerTodos(paginacion);
             var reviewsDTO = mapper.Map<List<ReviewsDTO>>(reviews);
             return TypedResults.Ok(reviewsDTO);
         }
 
-        static async Task<Results<Ok<ReviewsDTO>, NotFound>> ObtenerPorId(int id, IRepositorioReview repositorio, IMapper mapper)
+        static async Task<Results<Ok<ReviewsDTO>, NotFound>> ObtenerPorId(
+            int id,
+            [FromServices] IRepositorioReview repositorio,
+            [FromServices] IMapper mapper)
         {
             var review = await repositorio.ObtenerPorId(id);
-
             if (review is null)
             {
                 return TypedResults.NotFound();
@@ -50,11 +55,13 @@ namespace EjercicioWebAPI.Endpoints
             return TypedResults.Ok(reviewDTO);
         }
 
-        //Para poder recibir el Form File - permite recibir archivos.
-        static async Task<Results<ValidationProblem, Created<ReviewsDTO>>> Crear([FromForm] CrearReviewsDTO crearReviewDTO, IRepositorioReview repositorio,
-            IOutputCacheStore outputCacheStore, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos)
+        static async Task<Results<ValidationProblem, Created<ReviewsDTO>>> Crear(
+            [FromBody] CrearReviewsDTO crearReviewDTO, // Changed to [FromBody]
+            [FromServices] IRepositorioReview repositorio,
+            [FromServices] IOutputCacheStore outputCacheStore,
+            [FromServices] IMapper mapper,
+            [FromServices] IAlmacenadorArchivos almacenadorArchivos)
         {
-
             var review = mapper.Map<Review>(crearReviewDTO);
             var id = await repositorio.Crear(review);
             await outputCacheStore.EvictByTagAsync("reviews-get", default);
@@ -62,16 +69,20 @@ namespace EjercicioWebAPI.Endpoints
             return TypedResults.Created($"/reviews/{id}", reviewDTO);
         }
 
-        static async Task<Results<NoContent, NotFound>> Actualizar(int id,
-            [FromForm] CrearReviewsDTO crearActorDTO, IRepositorioReview repositorio, IAlmacenadorArchivos almacenadorArchivos,
-            IOutputCacheStore outputCacheStore, IMapper mapper)
+        static async Task<Results<NoContent, NotFound>> Actualizar(
+            int id,
+            [FromBody] CrearReviewsDTO crearReviewDTO, // Changed to [FromBody]
+            [FromServices] IRepositorioReview repositorio,
+            [FromServices] IAlmacenadorArchivos almacenadorArchivos,
+            [FromServices] IOutputCacheStore outputCacheStore,
+            [FromServices] IMapper mapper)
         {
             var reviewDB = await repositorio.ObtenerPorId(id);
             if (reviewDB is null)
             {
                 return TypedResults.NotFound();
             }
-            var reviewParaActualizar = mapper.Map<Review>(crearActorDTO);
+            var reviewParaActualizar = mapper.Map<Review>(crearReviewDTO);
             reviewParaActualizar.Id = id;
 
             await repositorio.Actualizar(reviewParaActualizar);
@@ -79,11 +90,13 @@ namespace EjercicioWebAPI.Endpoints
             return TypedResults.NoContent();
         }
 
-        static async Task<Results<NoContent, NotFound>> Borrar(int id, IRepositorioReview repositorio,
-            IOutputCacheStore outputCacheStore, IAlmacenadorArchivos almacenadorArchivos)
+        static async Task<Results<NoContent, NotFound>> Borrar(
+            int id,
+            [FromServices] IRepositorioReview repositorio,
+            [FromServices] IOutputCacheStore outputCacheStore,
+            [FromServices] IAlmacenadorArchivos almacenadorArchivos)
         {
             var actorDB = await repositorio.ObtenerPorId(id);
-
             if (actorDB is null)
             {
                 return TypedResults.NotFound();

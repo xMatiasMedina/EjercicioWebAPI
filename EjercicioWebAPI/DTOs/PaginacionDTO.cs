@@ -38,5 +38,25 @@ namespace EjercicioWebAPI.DTOs
             };
             return ValueTask.FromResult(resultado);
         }
+        public static bool TryParse(string value, out PaginacionDTO paginacionDTO)
+        {
+            paginacionDTO = null;
+            var parts = value.Split(',');
+
+            if (parts.Length != 2)
+                return false;
+
+            if (int.TryParse(parts[0], out int pagina) && int.TryParse(parts[1], out int recordsPorPagina))
+            {
+                paginacionDTO = new PaginacionDTO
+                {
+                    Pagina = pagina,
+                    RecordsPorPagina = recordsPorPagina
+                };
+                return true;
+            }
+            return false;
+        }
     }
+    
 }

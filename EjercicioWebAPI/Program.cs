@@ -65,9 +65,10 @@ builder.Services.AddStackExchangeRedisOutputCache(opciones =>
 });
 
 builder.Services.AddEndpointsApiExplorer(); //Le permite a swagger explorar y listar los endpoints
+
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v0.1", new OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Ejercicio API",
         Description = "Este es un web api para trabajar con clases de ejercicio",
@@ -75,7 +76,7 @@ builder.Services.AddSwaggerGen(c =>
         {
             Email = "anonimo",
             Name = "anonimo",
-            Url = new Uri("-")
+            Url = new Uri("https://google.com")
         },
         License = new OpenApiLicense
         {
@@ -223,7 +224,7 @@ app.MapGet("/error", () =>
 
 app.MapGroup("/usuarios").MapUsuarios();
 app.MapGroup("/preparadoresFisicos").MapPreparadoresFisicos();
-app.MapGroup("/clases/{claseId:int}/reviews").MapReviews();
+app.MapGroup("/reviews").MapReviews();
 app.MapGroup("/personas").MapPersonas();
 app.MapGroup("/inscripciones").MapInscripciones();
 app.MapGroup("/clases").MapClases();
