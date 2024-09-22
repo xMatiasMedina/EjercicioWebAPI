@@ -5,6 +5,7 @@ namespace EjercicioWebAPI.Utilidades
     public static class Llaves
     {
         public const string IssuerPropio = "nuestra-app";
+        private const string SeccionLlaves = "Authentication:Schemes:Bearer:SigningKeys"; // Esta declarado en UserSecrets
         private const string SeccionLlaves_Emisor = "Issuer";
         private const string SeccionLlaves_Valor = "Value";
 

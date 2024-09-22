@@ -130,7 +130,7 @@ namespace EjercicioWebAPI.Endpoints
         public async static Task<Results<Ok<RespuestaAutenticacionDTO>, NotFound>> RenovarToken(
             IServicioUsuarios servicioUsuarios, IConfiguration configuration, [FromServices] UserManager<IdentityUser> userManager)
         {
-            var usuario = await servicioUsuarios.ObtenerUsurio();
+            var usuario = await servicioUsuarios.ObtenerUsuario();
 
             if (usuario is null)
             {

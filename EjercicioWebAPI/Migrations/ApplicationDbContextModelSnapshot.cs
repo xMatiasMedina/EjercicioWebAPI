@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MinimalAPIPeliculas;
 
 #nullable disable
 
@@ -126,10 +125,13 @@ namespace EjercicioWebAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("DNI");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Personas");
                 });
@@ -382,27 +384,6 @@ namespace EjercicioWebAPI.Migrations
                     b.ToTable("UsuariosTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MinimalAPIPeliculas.Entidades.Error", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MensajeDeError")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StackTrace")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Errores");
-                });
-
             modelBuilder.Entity("EjercicioWebAPI.Entidades.Clase", b =>
                 {
                     b.HasOne("EjercicioWebAPI.Entidades.PreparadorFisico", "PreparadorFisico")
@@ -421,6 +402,17 @@ namespace EjercicioWebAPI.Migrations
                         .HasForeignKey("ClaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EjercicioWebAPI.Entidades.Persona", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("EjercicioWebAPI.Entidades.PreparadorFisico", b =>
