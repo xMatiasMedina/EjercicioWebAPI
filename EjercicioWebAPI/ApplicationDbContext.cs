@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Error = MinimalAPIPeliculas.Entidades.Error;
+using Error = EjercicioWebAPI.Entidades.Error;
 
-namespace MinimalAPIPeliculas
+namespace EjercicioWebAPI
 {
     public class ApplicationDbContext : IdentityDbContext
     {

@@ -5,28 +5,26 @@ using EjercicioWebAPI.Repositorios;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using MinimalAPIPeliculas.DTOs;
-using MinimalAPIPeliculas.Filtros;
-using MinimalAPIPeliculas.Servicios;
-using MinimalAPIPeliculas.Utilidades;
+using EjercicioWebAPI.DTOs;
+using EjercicioWebAPI.Filtros;
+using EjercicioWebAPI.Servicios;
+using EjercicioWebAPI.Utilidades;
 
 namespace EjercicioWebAPI.Endpoints
 {
     public static class PersonasEndpoints
     {
-        private static readonly string contenedor = "actores";
-        public static RouteGroupBuilder MapActores(this RouteGroupBuilder group)
+        private static readonly string contenedor = "personas";
+        public static RouteGroupBuilder MapPersonas(this RouteGroupBuilder group)
         {
-            group.MapGet("/", ObtenerTodos).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("actores-get"))
-                .AgregarParametrosPaginacionAOpenAPI(); //Con esto puedo modificar la meta data del endpoint para que swagger sepa que mostrar.
-
-            group.MapGet("/{id:int}", ObtenerPorId);
-            group.MapPost("/", Crear).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPersonaDTO>>()
+            group.MapGet("/", ObtenerTodos).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("personas-get"));
+            group.MapGet("/{dni:int}", ObtenerPorDNI);
+            group.MapPost("/", Crear).DisableAntiforgery()//.AddEndpointFilter<FiltroValidaciones<CrearPersonaDTO>>()
                 .RequireAuthorization(policyNames: "esadmin")
                 .WithOpenApi();//Desabilita procesos de seguridad (por las imagenes)
-            group.MapPut("/{id:int}", Actualizar).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPersonaDTO>>()
+            group.MapPut("/{dni:int}", Actualizar).DisableAntiforgery()//.AddEndpointFilter<FiltroValidaciones<CrearPersonaDTO>>()
                 .RequireAuthorization(policyNames: "esadmin").WithOpenApi();
-            group.MapDelete("/{id:int}", Borrar)
+            group.MapDelete("/{dni:int}", Borrar)
                 .RequireAuthorization(policyNames: "esadmin");
             return group;
         }
@@ -40,7 +38,7 @@ namespace EjercicioWebAPI.Endpoints
             return TypedResults.Ok(actoresDTO);
         }
 
-        static async Task<Results<Ok<PersonaDTO>, NotFound>> ObtenerPorId(int dni, IRepositorioPersona repositorio, IMapper mapper)
+        static async Task<Results<Ok<PersonaDTO>, NotFound>> ObtenerPorDNI(int dni, IRepositorioPersona repositorio, IMapper mapper)
         {
             var persona = await repositorio.ObtenerPorDNI(dni);
 

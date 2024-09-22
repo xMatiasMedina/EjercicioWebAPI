@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using MinimalAPIPeliculas.Utilidades;
+using EjercicioWebAPI.Utilidades;
 
-namespace MinimalAPIPeliculas.DTOs
+namespace EjercicioWebAPI.DTOs
 {
     public class PaginacionDTO
     {

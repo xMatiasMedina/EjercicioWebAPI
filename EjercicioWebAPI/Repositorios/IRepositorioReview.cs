@@ -1,5 +1,5 @@
 ﻿using EjercicioWebAPI.Entidades;
-using MinimalAPIPeliculas.DTOs;
+using EjercicioWebAPI.DTOs;
 
 namespace EjercicioWebAPI.Repositorios
 {

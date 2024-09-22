@@ -1,9 +1,9 @@
 ﻿using EjercicioWebAPI.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MinimalAPIPeliculas;
-using MinimalAPIPeliculas.DTOs;
-using MinimalAPIPeliculas.Utilidades;
+using EjercicioWebAPI;
+using EjercicioWebAPI.DTOs;
+using EjercicioWebAPI.Utilidades;
 
 namespace EjercicioWebAPI.Repositorios
 {

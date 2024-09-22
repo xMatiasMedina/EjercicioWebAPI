@@ -1,4 +1,4 @@
-﻿namespace MinimalAPIPeliculas.Entidades
+﻿namespace EjercicioWebAPI.Entidades
 {
     public class Error
     {

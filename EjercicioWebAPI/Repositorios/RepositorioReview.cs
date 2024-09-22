@@ -1,9 +1,9 @@
 ﻿using EjercicioWebAPI.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MinimalAPIPeliculas;
-using MinimalAPIPeliculas.DTOs;
-using MinimalAPIPeliculas.Utilidades;
+using EjercicioWebAPI;
+using EjercicioWebAPI.DTOs;
+using EjercicioWebAPI.Utilidades;
 
 namespace EjercicioWebAPI.Repositorios
 {
@@ -12,7 +12,7 @@ namespace EjercicioWebAPI.Repositorios
         private readonly ApplicationDbContext context;
         private readonly HttpContext httpContext;
 
-        public RepositorioReview(ApplicationDbContext context, HttpContextAccessor httpContextAccessor)
+        public RepositorioReview(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             this.httpContext = httpContextAccessor.HttpContext!;

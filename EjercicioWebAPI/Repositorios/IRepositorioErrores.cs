@@ -1,6 +1,6 @@
-﻿using MinimalAPIPeliculas.Entidades;
-using Error = MinimalAPIPeliculas.Entidades.Error; //ALIAS
-namespace MinimalAPIPeliculas.Repositorios
+﻿using EjercicioWebAPI.Entidades;
+using Error = EjercicioWebAPI.Entidades.Error; //ALIAS
+namespace EjercicioWebAPI.Repositorios
 {
     public interface IRepositorioErrores
     {
